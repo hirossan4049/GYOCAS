@@ -26,11 +26,9 @@ wasabi = boto3.client(
     aws_secret_access_key=SECRET_ACCESS_KEY,
 )
 
-while True:
-    print("download.sh を起動します。")
-    date = datetime.now(zoneinfo.ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d_%H-%M")
-    filename = f"{USER_ID}_{date}.mp4"
-    process = subprocess.Popen(
+
+def download():
+    return subprocess.Popen(
         [
             "ffmpeg",
             "-y",
@@ -43,6 +41,13 @@ while True:
             filename,
         ]
     )
+
+
+while True:
+    print("download.sh を起動します。")
+    date = datetime.now(zoneinfo.ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d_%H-%M")
+    filename = f"{USER_ID}_{date}.mp4"
+    process = download()
     print(f"PID: {process.pid}")
 
     time.sleep(5)
@@ -50,7 +55,9 @@ while True:
     if process.poll() is None:
         isLive = True
         print("配信始めたぞあいつ")
-        # process.send_signal(signal.SIGUSR1)
+        time.sleep(10)
+        process.send_signal(signal.SIGUSR1)
+        process = download()
 
     process.wait()
     if isLive:
