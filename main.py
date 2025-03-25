@@ -1,3 +1,4 @@
+#!/usr/bin/env -S uv run -s
 import os
 import subprocess
 import time
@@ -17,7 +18,6 @@ ACCESS_KEY = os.environ.get("ACCESS_KEY")
 SECRET_ACCESS_KEY = os.environ.get("SECRET_ACCESS_KEY")
 S3_DIR = os.environ.get("S3_DIR")
 USER_ID = os.environ.get("USER_ID")
-print("HELLO USER_ID", USER_ID)
 
 wasabi = boto3.client(
     "s3",
